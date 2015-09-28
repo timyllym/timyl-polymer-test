@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="../bower_components/polymer/polymer.html" rel="import">
+	<link href="../bower_components/paper-card/paper-card.html" rel="import">
+  <link href="../bower_components/paper-material/paper-material.html" rel="import">
+	<link href="../bower_components/paper-checkbox/paper-checkbox.html" rel="import">
+	<link href="../bower_components/paper-item/paper-item.html" rel="import">
+	<link href="../bower_components/paper-input/paper-input.html" rel="import">
+	<link href="../bower_components/iron-icons/iron-icons.html" rel="import">
+	<link href="../bower_components/paper-fab/paper-fab.html" rel="import">
+</head>
+
+<dom-module id="todo-element" attributes="type message action">
+  <style is="custom-style">
+    .base_card {
+      font-family: Roboto;
+      margin: 20px 0 0 20px;
+      width: 230px;
+      height: 280px;
+    }
+    .card-content {
+      height: 141px;
+    }
+    paper-button {
+	    // color: var(--my-toolbar-title-color);
+      text-transform: uppercase;
+    }
+    :host ::content .header.paper-card .title-text.paper-card {
+      // color: var(--my-toolbar-title-color);
+			font-size: 36px;
+    }
+		.report {
+			font-family: Roboto;
+      margin: 20px 0 0 20px;
+      width: 230px;
+      height: 280px;
+
+		}
+		.report paper-button {
+			color: #41c498;
+		}
+		:host ::content .report  .header.paper-card .title-text.paper-card {
+      color: #41c498;
+    }
+		.question {
+			font-family: Roboto;
+      margin: 20px 0 0 20px;
+      width: 230px;
+      height: 280px;
+		}
+		.question paper-button {
+			color: #c15782;
+		}
+		:host ::content .question  .header.paper-card .title-text.paper-card {
+      color: #c15782;
+    }
+		.alert {
+			font-family: Roboto;
+      margin: 20px 0 0 20px;
+      width: 230px;
+      height: 280px;
+		}
+		.alert paper-button {
+			color: #f7931e;
+		}
+		:host ::content .alert  .header.paper-card .title-text.paper-card {
+      color: #f7931e;
+    }
+  </style>
+  <template>
+    <!-- local DOM for your element -->
+    <paper-card heading="{{ type }}" class$="{{ type }}">
+      <div class="card-content">{{ message }}</div>
+      <div class="card-actions">
+        <paper-button>{{ action }}</paper-button>
+      </div>
+    </paper-card>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "todo-element",
+    properties: {
+        // declare properties for the element's public API
+        type: {
+            type: String,
+            value: "Report"
+        },
+        message: {
+            type: String,
+            value: "Weekly Report"
+        },
+        action: {
+            type: String,
+            value: "Details"
+        }
+    },
+    compChanged: function(e){
+        if(e){ this.fire('complete',this); }
+    },
+    doEdit: function(e){
+        this.editing=!this.editing;
+    },
+  });
+</script>

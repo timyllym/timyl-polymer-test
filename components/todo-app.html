@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="../bower_components/polymer/polymer.html" rel="import">
+    <link href="../components/todo-element.html" rel="import">
+    <link href="../bower_components/paper-card/paper-card.html" rel="import">
+    <link href="../bower_components/paper-material/paper-material.html" rel="import">
+    <link href="../bower_components/paper-header-panel/paper-header-panel.html" rel="import">
+    <link href="../bower_components/paper-toolbar/paper-toolbar.html" rel="import">
+    <link href="../bower_components/paper-drawer-panel/paper-drawer-panel.html" rel="import">
+  	<link href="../bower_components/paper-icon-button/paper-icon-button.html" rel="import">
+  	<link href="../bower_components/paper-menu/paper-menu.html" rel="import">
+  	<link href="../bower_components/paper-item/paper-item.html" rel="import">
+  	<link href="../bower_components/paper-input/paper-input.html" rel="import">
+  	<link href="../bower_components/iron-icons/iron-icons.html" rel="import">
+    <link href="../bower_components/font-roboto/roboto.html" rel="import">
+</head>
+
+<dom-module id="todo-app">
+  <style>
+    /* CSS rules for your element */
+    html {
+      font-family: Roboto;
+    }
+    .main-panel {
+      background-color: #e6e6e6;
+    }
+    .side-panel {
+      background-color: #f2f2f2;
+    }
+    .main_title {
+      font-family: Roboto;
+      font-size: 48px;
+      margin-left: 20px;
+    }
+    .main_toolbar {
+      background-color: #2bbee0;
+    }
+    .main_toolbar > #topBar .paper-toolbar {
+      top: 70px;
+    }
+    .report {
+      --my-toolbar-title-color: #41c498;
+    }
+    .question {
+      --my-toolbar-title-color: #c15782;
+    }
+    .alert {
+      --my-toolbar-title-color: #f7931e;
+    }
+    .logo {
+      text-align: center;
+      margin: 50px auto;
+      width: 90px;
+      height: 90px;
+    }
+    .side-panel-links {
+      margin-top: 53px;
+    }
+    .side-panel-link {
+      font-family: Roboto;
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 10px;
+      height: 33px;
+      padding-top: 10px;
+      margin-left: 20px;
+      padding-right: 20px;
+    }
+    .side-panel-link-active {
+      background-color: #e6e6e6;
+      border-left: 5px solid #2bbee0;
+    }
+    .filter-group {
+      font-family: Roboto;
+      font-size: 18px;
+      padding: 10px 20px;
+      display: inline-block;
+    }
+    .filter-title {
+      padding: 2px 4px;
+      display: inline-block;
+    }
+    .filter-item-active {
+      background-color: #2bbee0;
+      color: #ffffff;
+      padding: 2px 4px;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .filter-item {
+      color: #2bbee0;
+      padding: 2px 4px;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .sorting {
+        display: block;
+    }
+  </style>
+  <template>
+    <!-- local DOM for your element -->
+    <paper-drawer-panel>
+      <paper-header-panel drawer class="side-panel">
+        <div class="logo">
+          <img src="../images/logo.svg" />
+        </div>
+        <div class="side-panel-links">
+          <div class="side-panel-link side-panel-link-active">dashboard</div>
+          <div class="side-panel-link">machinery</div>
+          <div class="side-panel-link">reporting</div>
+          <div class="side-panel-link">modules</div>
+          <div class="side-panel-link">settings</div>
+        </div>
+      </paper-header-panel>
+
+      <paper-header-panel main class="flex main-panel" mode="waterfall-tall">
+        <paper-toolbar class="main_toolbar">
+          <div class="middle main_title">dashboard /</div>
+        </paper-toolbar>
+        <div class="sorting">
+            <div class="filter-group">
+              <div class="filter-title">Filter by:</div>
+              <div id="report" class$="{{filterReportStyle}}" on-tap="setFilter">report</div>
+              <div id="question" class$="{{filterQuestionStyle}}" on-tap="setFilter">question</div>
+              <div id="alert" class$="{{filterAlertStyle}}" on-tap="setFilter">alert</div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-title">Group by:</div>
+              <div id="type" class$="{{groupByTypeStyle}}" on-tap="setGroup">type</div>
+            </div>
+        </div>
+        <div>
+          <template id="tasks" is="dom-repeat" items="{{cards}}" filter="checkFilters" observe="type">
+            <todo-element class$="{{item.type}}" type="{{item.type}}" message="{{item.message}}" action="{{item.action}}"></todo-element>
+          </template>
+        </div>
+      </paper-header-panel>
+
+    </paper-drawer-panel>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+      is: "todo-app",
+      properties: {
+            cards: {
+                type: Array,
+                value: [{ type: "question", message: "Do you want to start up?", action: "Respond >" },
+                        { type: "report", message: "Weekly Report", action: "Dismiss >" },
+                        { type: "alert", message: "Machine messed up", action: "Review >" },
+                        { type: "question", message: "Do you want to start up?", action: "Respond >" },
+                        { type: "report", message: "Weekly Report", action: "Dismiss >" },
+                        { type: "alert", message: "Machine messed up", action: "Review >" },
+                        { type: "question", message: "Do you want to start up?", action: "Respond >" },
+                        { type: "report", message: "Weekly Report", action: "Dismiss >" },
+                        { type: "alert", message: "Machine messed up", action: "Review >" },
+                        { type: "question", message: "Do you want to start up?", action: "Respond >" },
+                        { type: "report", message: "Weekly Report", action: "Dismiss >" },
+                        { type: "alert", message: "Machine messed up", action: "Review >" },
+                        { type: "question", message: "Do you want to start up?", action: "Respond >" },
+                        { type: "report", message: "Weekly Report", action: "Dismiss >" },
+                        { type: "alert", message: "Machine messed up", action: "Review >" },
+                        { type: "question", message: "Do you want to start up?", action: "Respond >" },
+                        { type: "report", message: "Weekly Report", action: "Dismiss >" },
+                        { type: "alert", message: "Machine messed up", action: "Review >" } ]
+            },
+            activeFilters: {
+                type: Array,
+                value: []
+            },
+            filterReportStyle: {
+                type: String,
+                value: "filter-item"
+            },
+            filterQuestionStyle: {
+                type: String,
+                value: "filter-item"
+            },
+            filterAlertStyle: {
+                type: String,
+                value: "filter-item"
+            },
+            groupByTypeStyle: {
+                type: String,
+                value: "filter-item"
+            },
+            groupByMachineStyle: {
+                type: String,
+                value: "filter-item"
+            },
+            groupByModuleStyle: {
+                type: String,
+                value: "filter-item"
+            },
+            groupingEnabled: {
+                type: Boolean,
+                value: false
+            }
+      },
+      checkFilters: function(item) {
+          if (this.activeFilters.length == 0) return true;
+          return this.activeFilters.indexOf(item.type) > -1;
+      },
+      setFilter: function(event) {
+          var index = this.activeFilters.indexOf(event.target.id);
+          var styleObject;
+
+          if (index > -1) {
+              this.activeFilters.splice(index, 1);
+              if (event.target.id == "report") this.filterReportStyle = "filter-item";
+              else if (event.target.id == "question") this.filterQuestionStyle = "filter-item";
+              else if (event.target.id == "alert") this.filterAlertStyle = "filter-item";
+
+          } else {
+              this.activeFilters.push(event.target.id);
+              if (event.target.id == "report") this.filterReportStyle = "filter-item-active";
+              else if (event.target.id == "question") this.filterQuestionStyle = "filter-item-active";
+              else if (event.target.id == "alert") this.filterAlertStyle = "filter-item-active";
+          }
+          this.$.tasks.render();
+      },
+      setGroup: function(event) {
+          if (event.target.id == "type") {
+              if (this.groupingEnabled) {
+                  this.groupingEnabled = false;
+                  this.groupByTypeStyle = "filter-item";
+              } else {
+                  this.groupingEnabled = true;
+                  this.groupByTypeStyle = "filter-item-active";
+              }
+          }
+      },
+      ready: function(e){
+
+      }
+  });
+</script>
